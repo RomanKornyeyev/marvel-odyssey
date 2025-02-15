@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<h2>Reenviar Confirmación de Email</h2>
+
+<p>Si no has recibido el email de confirmación o ha caducado, introduce tu email para recibir un nuevo enlace.</p>
+
+<form method="post">
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('resend_confirmation') }}">
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Correo electrónico</label>
+        <input type="email" name="email" id="email" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Reenviar Confirmación</button>
+</form>
+{% endblock %}

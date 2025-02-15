@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+<h2>Registro</h2>
+
+{{ form_start(form) }}
+    <div class="mb-3">
+        {{ form_label(form.nombre) }}
+        {{ form_widget(form.nombre) }}
+        {{ form_errors(form.nombre) }}
+    </div>
+    <div class="mb-3">
+        {{ form_label(form.email) }}
+        {{ form_widget(form.email) }}
+        {{ form_errors(form.email) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.password) }}
+        {{ form_widget(form.password) }}
+        {{ form_errors(form.password) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_row(form.registrarse) }}
+    </div>
+{{ form_end(form) }}
+
+{% endblock %}
+
+
+
