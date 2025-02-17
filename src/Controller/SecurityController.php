@@ -14,6 +14,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class SecurityController extends AbstractController
 {
@@ -41,7 +42,7 @@ class SecurityController extends AbstractController
     public function logout(): void
     {
         // Symfony maneja el logout automáticamente
-        throw new \Exception('No olvides activar el logout en security.yaml');
+        throw new \Exception('Bye =)'); // El logout debe estar activado en security.yaml
     }
 
     #[Route('/registro', name: 'app_register')]
@@ -64,12 +65,13 @@ class SecurityController extends AbstractController
         }
 
         return $this->render('security/register.html.twig', [
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ]);
     }
 
+    // HACER QUE AUTENTIQUE AUTOMÁTICAMENTE AL USUARIO AL CONFIRMAR SU EMAIL
     #[Route('/confirmar-cuenta', name: 'app_confirm_email')]
-    public function confirmEmail(Request $request, EntityManagerInterface $em): Response
+    public function confirmEmail(Request $request, EntityManagerInterface $em, Security $security): Response
     {
         $tokenValue = $request->query->get('token');
 
@@ -100,8 +102,13 @@ class SecurityController extends AbstractController
         $token->markAsUsed();
         $em->flush();
 
+        // 4. Autenticar automáticamente al usuario
+        // $security->login($user);
+
         // Mensaje de éxito y redirección
+        // $this->addFlash('success', 'Tu cuenta ha sido confirmada correctamente. Has iniciado sesión.');
         $this->addFlash('success', 'Tu cuenta ha sido confirmada correctamente. Ahora puedes iniciar sesión.');
+        // return $this->redirectToRoute('app_index');
         return $this->redirectToRoute('app_login');
     }
 
@@ -114,7 +121,9 @@ class SecurityController extends AbstractController
 
             // Validar el token CSRF
             if (!$csrfTokenManager->isTokenValid(new CsrfToken('resend_confirmation', $csrfToken))) {
-                throw $this->createAccessDeniedException('CSRF token inválido.');
+                // throw $this->createAccessDeniedException('CSRF token inválido.'); // es más estricto, pero menos amigable que un flash
+                $this->addFlash('danger', 'Token CSRF inválido.');
+                return $this->redirectToRoute('app_resend_confirmation');
             }
 
             if (!$email) {
@@ -153,7 +162,9 @@ class SecurityController extends AbstractController
 
             // Validar el token CSRF
             if (!$csrfTokenManager->isTokenValid(new CsrfToken('forgot_password', $csrfToken))) {
-                throw $this->createAccessDeniedException('CSRF token inválido.');
+                // throw $this->createAccessDeniedException('CSRF token inválido.'); // es más estricto, pero menos amigable que un flash
+                $this->addFlash('danger', 'Token CSRF inválido.');
+                return $this->redirectToRoute('app_forgot_password');
             }
 
             if (!$email) {
@@ -206,7 +217,9 @@ class SecurityController extends AbstractController
 
             // Validar CSRF
             if (!$csrfTokenManager->isTokenValid(new CsrfToken('reset_password', $csrfToken))) {
-                throw $this->createAccessDeniedException('CSRF token inválido.');
+                // throw $this->createAccessDeniedException('CSRF token inválido.'); // es más estricto, pero menos amigable que un flash
+                $this->addFlash('danger', 'Token CSRF inválido.');
+                return $this->redirectToRoute('app_forgot_password');
             }
 
             $newPassword = $request->request->get('password');

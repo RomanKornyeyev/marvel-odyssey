@@ -37,6 +37,9 @@ class RegisterType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Usuario::class,
+            'csrf_protection' => true, // Activar protección CSRF
+            'csrf_field_name' => '_csrf_token', // Nombre del campo oculto
+            'csrf_token_id'   => 'register', // Identificador único del token
         ]);
     }
 }

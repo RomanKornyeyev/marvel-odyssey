@@ -1,13 +1,10 @@
 {# ********** FLASHES ********** #}
-<!-- ERROR CRSF TOKEN -->
-{% for mensaje in app.flashes('mensaje') %}
-    <div class="alert alert-{{ app.flashes('css')[0] }} alert-dismissible fade mb-4 alert-slide-in" role="alert">
-        {{ mensaje }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{% endfor %}
+<!-- ERROR FORMULARIO (Mayormente CSRF) -->
+{% if form is defined and form_errors(form) %}
+    {{ form_errors(form) }}
+{% endif %}
 
-<!-- Mensajes exito fallo envío -->
+<!-- Mensajes éxito / fallo personalizados -->
 {% for label, messages in app.flashes %}
     {% for message in messages %}
         <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade mb-4 alert-slide-in" role="alert">
@@ -16,23 +13,3 @@
         </div>
     {% endfor %}
 {% endfor %}
-
-<!-- Mensaje de faltan campos en el form -->
-{% if errors is defined and errors|length > 0 %}
-    <div class="alert alert-danger alert-dismissible fade mb-4 alert-slide-in" role="alert">
-        Faltan campos por rellenar o tienen carácteres inválidos
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{% endif %}
-
-<!-- Mensajes de errores en el form (específicos, mostrados en alert) -->
-{# {% if errors is defined and errors|length > 0 %}
-    {% for formError in errors %}
-        {% for error in formError %}
-            <div class="alert alert-danger alert-dismissible fade mb-4 alert-slide-in" role="alert">
-                {{ error.message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endfor %}
-    {% endfor %}
-{% endif %} #}

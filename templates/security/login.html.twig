@@ -1,16 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
+
+{# Flash errores y/o confirmación #}
 {% if error %}
-    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% if error.messageKey == 'Debes confirmar tu email antes de iniciar sesión.' %}
+        <div class="alert alert-danger">
+            {{ error.messageKey }}
+            <a href="{{ path('app_resend_confirmation') }}">Reenviar confirmación</a>
+        </div>
+    {% else %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
 {% endif %}
 
 <div class="d-flex justify-content-center align-items-center h-100">
     <main class="form-signin w-100 m-auto">
         <form method="post">
-            <!-- <img class="mb-4" src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
             <h1 class="h3 mb-3 fw-normal">Iniciar sesión</h1>
 
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('login_authenticate') }}">
             <div class="form-floating">
                 <input type="email" class="form-control" id="username" name="_username" value="{{ last_username }}" required placeholder="name@example.com">
                 <label for="username">Email</label>
