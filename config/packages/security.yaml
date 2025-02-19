@@ -20,7 +20,7 @@ security:
                 login_path: app_login
                 check_path: app_login
                 enable_csrf: true
-                csrf_token_id: login_authenticate # Asegurar que Symfony usa este ID
+                csrf_token_id: login_authenticate # Asegurar que Symfony usa este ID para CSRF
             logout:
                 path: app_logout
             remember_me:

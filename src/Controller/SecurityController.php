@@ -15,6 +15,7 @@ use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 
 class SecurityController extends AbstractController
 {
@@ -102,14 +103,16 @@ class SecurityController extends AbstractController
         $token->markAsUsed();
         $em->flush();
 
-        // 4. Autenticar automáticamente al usuario
-        // $security->login($user);
+        // 4. Autenticar automáticamente al usuario (retirar los 2 últimos params para no activar remember me)
+        $security->login($user, 'form_login', 'main', [(new RememberMeBadge())->enable()]);
 
-        // Mensaje de éxito y redirección
-        // $this->addFlash('success', 'Tu cuenta ha sido confirmada correctamente. Has iniciado sesión.');
-        $this->addFlash('success', 'Tu cuenta ha sido confirmada correctamente. Ahora puedes iniciar sesión.');
-        // return $this->redirectToRoute('app_index');
-        return $this->redirectToRoute('app_login');
+        // Mensaje de éxito, login y redirección
+        $this->addFlash('success', 'Tu cuenta ha sido confirmada correctamente. Has iniciado sesión.');
+        return $this->redirectToRoute('app_index');
+
+        // sin login automático
+        // $this->addFlash('success', 'Tu cuenta ha sido confirmada correctamente. Ahora puedes iniciar sesión.');
+        // return $this->redirectToRoute('app_login');
     }
 
     #[Route('/reenviar-confirmacion', name: 'app_resend_confirmation')]
