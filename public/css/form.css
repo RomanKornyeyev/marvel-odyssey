@@ -1,5 +1,11 @@
+.form-wrapper{
+  width: 95%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
 /* FORM SIGN IN */
-.form-signin {
+/* .form-signin {
   max-width: 330px;
   padding: 1rem;
 }
@@ -18,7 +24,7 @@
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-}
+} */
 
 /* .invalid-feedback ul {
   list-style: none;

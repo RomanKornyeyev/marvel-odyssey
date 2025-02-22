@@ -222,7 +222,7 @@ class SecurityController extends AbstractController
             if (!$csrfTokenManager->isTokenValid(new CsrfToken('reset_password', $csrfToken))) {
                 // throw $this->createAccessDeniedException('CSRF token inválido.'); // es más estricto, pero menos amigable que un flash
                 $this->addFlash('danger', 'Token CSRF inválido.');
-                return $this->redirectToRoute('app_forgot_password');
+                return $this->redirectToRoute('app_reset_password', ['token' => $tokenValue]);
             }
 
             $newPassword = $request->request->get('password');
