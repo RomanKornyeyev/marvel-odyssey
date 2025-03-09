@@ -7,6 +7,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: "usuario")]
@@ -29,7 +31,7 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column(type: "json")]
-    private array $roles = [];
+    private array $roles = ['ROLE_USER'];
 
     #[Assert\NotBlank]
     #[Assert\Length(
@@ -41,6 +43,22 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
+
+    // mappedBy se refiere a la propiedad en la entidad relacionada
+    // targetEntity se refiere a la entidad relacionada
+    // permite acceder a el usuario al que pertenece una lista desde la entidad Lista.
+    #[ORM\OneToMany(mappedBy: 'usuario', targetEntity: Lista::class, cascade: ['persist', 'remove'])]
+    private Collection $listas;
+
+    #[ORM\OneToMany(mappedBy: "usuario", targetEntity: Review::class, cascade: ["persist", "remove"])]
+    private Collection $reviews;
+
+    // Constructor
+    public function __construct()
+    {
+        $this->listas = new ArrayCollection();
+        $this->reviews = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -110,5 +128,54 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // Si almacenas datos temporales sensibles, límpialos aquí
         // Implementar esta función más adelante
+    }
+
+    // Getters y Setters para listas
+    public function getListas(): Collection
+    {
+        return $this->listas;
+    }
+
+    public function addLista(Lista $lista): self
+    {
+        if (!$this->listas->contains($lista)) {
+            $this->listas->add($lista);
+            $lista->setUsuario($this);
+        }
+        return $this;
+    }
+
+    public function removeLista(Lista $lista): self
+    {
+        if ($this->listas->removeElement($lista)) {
+            if ($lista->getUsuario() === $this) {
+                $lista->setUsuario(null);
+            }
+        }
+        return $this;
+    }
+
+    public function getReviews(): Collection
+    {
+        return $this->reviews;
+    }
+
+    public function addReview(Review $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setUsuario($this);
+        }
+        return $this;
+    }
+
+    public function removeReview(Review $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            if ($review->getUsuario() === $this) {
+                $review->setUsuario(null);
+            }
+        }
+        return $this;
     }
 }

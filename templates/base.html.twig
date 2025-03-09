@@ -71,7 +71,7 @@
 
 
 								<ul class="navbar-nav flex-row flex-wrap ms-md-auto">
-									{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+									{% if is_granted('IS_AUTHENTICATED_FULLY') or is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 										{# Si el usuario está autenticado, mostramos su nombre y un enlace a Logout #}
 										<li class="nav-item">
 											<span class="navbar-text d-inline-block me-3">Hola, {{ app.user.nombre }}</span>
