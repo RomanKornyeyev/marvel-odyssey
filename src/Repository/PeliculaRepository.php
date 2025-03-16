@@ -40,4 +40,31 @@ class PeliculaRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+    
+    public function findByFilters(array $filters): array
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        if (!empty($filters['inicio'])) {
+            $qb->andWhere('p.anio >= :inicio')
+                ->setParameter('inicio', $filters['inicio']);
+        }
+
+        if (!empty($filters['fin'])) {
+            $qb->andWhere('p.anio <= :fin')
+                ->setParameter('fin', $filters['fin']);
+        }
+
+        if (!empty($filters['titulo'])) {
+            $qb->andWhere('p.titulo LIKE :titulo')
+                ->setParameter('titulo', '%' . $filters['titulo'] . '%');
+        }
+
+        if (!empty($filters['orden'])) {
+            $qb->orderBy('p.anio', $filters['orden']);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
 }
