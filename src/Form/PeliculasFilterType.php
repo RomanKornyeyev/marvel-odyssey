@@ -34,9 +34,8 @@ class PeliculasFilterType extends AbstractType
                 ],
                 'required' => false,
                 'label' => 'Ordenar por año',
-                'placeholder' => 'Seleccione una opción'
-            ])
-            ->add('buscar', SubmitType::class, ['label' => 'Filtrar']);
+                'placeholder' => 'Seleccione'
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
