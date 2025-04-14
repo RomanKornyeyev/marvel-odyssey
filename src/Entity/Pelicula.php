@@ -28,8 +28,8 @@ class Pelicula
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $imagen = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    private \DateTimeInterface $createdAt;
+    #[ORM\Column(options: ["default" => "CURRENT_TIMESTAMP"])]
+    private \DateTime $createdAt;
 
     // FK
     #[ORM\OneToMany(mappedBy: "pelicula", targetEntity: ListaPelicula::class, cascade: ["persist", "remove"])]

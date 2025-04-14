@@ -22,7 +22,10 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: "string", length: 255)]
     #[Assert\NotBlank]
-    #[Assert\Length(min: 2)]
+    #[Assert\Length(
+        min: 2,
+        minMessage: 'El nombre debe tener al menos {{ limit }} caracteres.'
+    )]
     private ?string $nombre = null;
 
     #[Assert\NotBlank]

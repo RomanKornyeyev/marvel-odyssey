@@ -5,12 +5,15 @@
 {# Flash errores y/o confirmación #}
 {% if error %}
     {% if error.messageKey == 'Debes confirmar tu email antes de iniciar sesión.' %}
-        <div class="alert alert-danger">
+        <div class="alert alert-danger fade mb-4 alert-slide-in" role="alert">
             {{ error.messageKey }}
             <a href="{{ path('app_resend_confirmation') }}">Reenviar confirmación</a>
         </div>
     {% else %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        <div class="alert alert-danger alert-dismissible fade mb-4 alert-slide-in" role="alert">
+            {{ error.messageKey|trans(error.messageData, 'security') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     {% endif %}
 {% endif %}
 

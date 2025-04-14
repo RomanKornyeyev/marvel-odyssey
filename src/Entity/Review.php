@@ -35,10 +35,10 @@ class Review
     #[ORM\Column(type: "text", nullable: true)]
     private ?string $comentario = null;
 
-    #[ORM\Column(type: "datetime", options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[ORM\Column(options: ["default" => "CURRENT_TIMESTAMP"])]
     private \DateTime $createdAt;
 
-    #[ORM\Column(type: "datetime", nullable: true)]
+    #[ORM\Column(nullable: true)]
     private ?\DateTime $modifiedAt = null;
 
     public function __construct()
